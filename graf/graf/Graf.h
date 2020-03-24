@@ -12,6 +12,7 @@ class Graf
 	void dfs(int, bool*, int*, int&) const;		//functie de ajutor ptr dfs-ul public
 	void dfs(int, bool*) const;					//functie de ajutor ptr cntConexe
 	bool existsEdge(int, int);					//verifica daca o muchie se afla in graf
+	void existsNode(int) const;						//verifica daca un nod se afla in graf
 public:
 	Graf();													//constrcutor fara parametri
 	Graf(int);												//constructor cu un parametru

@@ -33,6 +33,12 @@ int Graf::getEdgeCount() const
 	return edgeCount;								//returneaza nr de muchii
 }
 
+void Graf::existsNode(int node) const				//verific daca nodul apartine grafului
+{
+	if (node >= nodeCount || node < 0)
+		throw "Nodul nu exista";
+}
+
 void Graf::dfs(int node, bool* viz, int* vector, int& index) const					//parcurgerea in adancime - functie auxiliara 
 {
 	viz[node] = true;																//nodul curent a fost vizitat
@@ -46,6 +52,7 @@ void Graf::dfs(int node, bool* viz, int* vector, int& index) const					//parcurg
 
 int* Graf::dfs(int node) const								//parcurgerea in adancime
 {
+	existsNode(node);										//verific daca nodul apartine grafului
 	int* vector = new int[nodeCount + 1];					//retinem elementele in ordinea parcurgerii; la final adaugam -1 ca sa marcam capatul
 	bool* viz = new bool[nodeCount];						//vector unde vor fi marcate nodurile vizitate
 	for (int i = 0; i < nodeCount; i++)
@@ -61,6 +68,7 @@ int* Graf::dfs(int node) const								//parcurgerea in adancime
 
 int* Graf::bfs(int node) const								//parcurgerea in latime
 {
+	existsNode(node);										//verific daca nodul apartine grafului
 	int* vector = new int[nodeCount + 1];					//retinem elementele in ordinea parcurgerii; la final adaugam -1 ca sa marcam capatul
 	bool* viz = new bool[nodeCount];						//vector unde vor fi marcate elementele vizitate
 	for (int i = 0; i < nodeCount; i++)							
@@ -90,6 +98,9 @@ int* Graf::bfs(int node) const								//parcurgerea in latime
 
 int Graf::distance(int node1, int node2) const			//se bazeza pe bfs
 {
+	existsNode(node1);									//verific daca nodul apartine grafului
+	existsNode(node2);
+
 	int* queue = new int[nodeCount];
 	int* dist = new int[nodeCount];												
 	for (int i = 0; i < nodeCount; i++)					//distanta dintre oricare doua noduri se considera initial infinit
@@ -146,8 +157,11 @@ bool Graf::isTree() const
 	return (cntConexe() == 1 && edgeCount == nodeCount - 1);
 }
 
-bool Graf::existsEdge(int x, int y)												//verificam daca o muchie exista deja in graf pentru a nu o mai adauga o data
+bool Graf::existsEdge(int x, int y)							//verificam daca o muchie exista deja in graf pentru a nu o mai adauga o data
 {
+	existsNode(x);											//verific daca nodul apartine grafului
+	existsNode(y);
+
 	for (Node* p = graf[x]->getStart(); p != NULL; p = p->getNext())
 		if (p->getInfo() == y)
 			return true;
@@ -156,6 +170,9 @@ bool Graf::existsEdge(int x, int y)												//verificam daca o muchie exista 
 
 void Graf::addEdge(int x, int y)					
 {
+	existsNode(x);									//verific daca nodul apartine grafului
+	existsNode(y);
+
 	if (x != y && !existsEdge(x, y)) {
 		graf[x]->insert(y);							//adauga muchie de la x la y
 		graf[y]->insert(x);							//adauga muchie de la y la x
@@ -168,8 +185,10 @@ void Graf::addEdge(int x, int y)
 			throw "Muchia exista deja";
 }
 
-int* Graf::operator[](int node) const											//supraincarcarea operatorului []
+int* Graf::operator[](int node) const						//supraincarcarea operatorului []
 {
+	existsNode(node);										//verific daca nodul apartine grafului
+	
 	int* vector = new int[graf[node]->getLength() + 1];							//alocam cu o componenta in plus pentru ca marcam cu -1 finalul
 	int index = 0;
 	for (Node* p = graf[node]->getStart(); p != NULL; p = p->getNext())
