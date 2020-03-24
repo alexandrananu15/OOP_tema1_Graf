@@ -194,8 +194,8 @@ bool Graf::operator>(Graf& other) const											//supraincarcarea operatorului
 
 Graf& Graf::operator=(const Graf& gr)											//supraincarcarea operatorului =
 {
-	for (int i = 0; i < nodeCount; i++)
-		delete graf[i];
+	for (int i = 0; i < nodeCount; i++)					
+		delete graf[i];															//eliberez memoria
 	delete[] graf;
 	nodeCount = gr.nodeCount;
 	edgeCount = gr.edgeCount;
